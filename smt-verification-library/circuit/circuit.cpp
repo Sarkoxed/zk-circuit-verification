@@ -143,18 +143,18 @@ std::pair<Circuit<FF>, Circuit<FF>> unique_witness(nlohmann::json& circuit_info,
 template std::pair<Circuit<FFTerm>, Circuit<FFTerm>> unique_witness(
     nlohmann::json& circuit_info,
     Solver* s,
-    const std::vector<std::string>& equal = {},
-    const std::vector<std::string>& not_equal = {},
-    const std::vector<std::string>& equal_at_the_same_time = {},
-    const std::vector<std::string>& not_eqaul_at_the_same_time = {});
+    const std::vector<std::string>& equal,
+    const std::vector<std::string>& not_equal,
+    const std::vector<std::string>& equal_at_the_same_time,
+    const std::vector<std::string>& not_eqaul_at_the_same_time);
 
 template std::pair<Circuit<FFITerm>, Circuit<FFITerm>> unique_witness(
     nlohmann::json& circuit_info,
     Solver* s,
-    const std::vector<std::string>& equal = {},
-    const std::vector<std::string>& not_equal = {},
-    const std::vector<std::string>& equal_at_the_same_time = {},
-    const std::vector<std::string>& not_eqaul_at_the_same_time = {});
+    const std::vector<std::string>& equal,
+    const std::vector<std::string>& not_equal,
+    const std::vector<std::string>& equal_at_the_same_time,
+    const std::vector<std::string>& not_eqaul_at_the_same_time);
 
 /**
  * @brief Check your circuit for witness uniqness

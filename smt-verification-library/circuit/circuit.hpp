@@ -84,10 +84,11 @@ Circuit<FF>::Circuit(nlohmann::json& circuit_info, Solver* solver, const std::st
         variable_names_inverse.insert({ x.second, x.first });
     }
 
-    variable_names.insert({ 0, "zero" });
-    variable_names.insert({ 1, "one" });
-    variable_names_inverse.insert({ "zero", 0 });
-    variable_names_inverse.insert({ "one", 1 });
+    //variable_names.insert({ 0, "zero" });
+    //variable_names.insert({ 1, "one" });
+    //variable_names_inverse.insert({ "zero", 0 });
+    //variable_names_inverse.insert({ "one", 1 });
+ 
     //this->graph = std::vector<std::vector<uint32_t>>(this->variables.size());
     this->init();
     //this->init_graph();
@@ -103,10 +104,10 @@ template <typename FF> void Circuit<FF>::init()
 {
     size_t num_vars = variables.size();
 
-    symbolic_vars.push_back(FF::Var("zero" + this->tag, this->solver));
-    symbolic_vars.push_back(FF::Var("one" + this->tag, this->solver));
+    //symbolic_vars.push_back(FF::Var("zero" + this->tag, this->solver));
+    //symbolic_vars.push_back(FF::Var("one" + this->tag, this->solver));
 
-    for (size_t i = 2; i < num_vars; i++) {
+    for (size_t i = 0; i < num_vars; i++) {// i = 2
         if (variable_names.contains(static_cast<uint32_t>(i))) {
             std::string name = variable_names[static_cast<uint32_t>(i)];
             symbolic_vars.push_back(FF::Var(name + this->tag, this->solver));
@@ -115,8 +116,9 @@ template <typename FF> void Circuit<FF>::init()
         }
     }
 
-    symbolic_vars[0] == std::string("0");
-    symbolic_vars[1] == std::string("1");
+    //symbolic_vars[0] == std::string("0");
+    //symbolic_vars[1] == std::string("1");
+    symbolic_vars[0] == "1";
 
     for (auto i : public_inps) {
         symbolic_vars[i] == variables[i];
@@ -195,9 +197,9 @@ template <typename FF> void Circuit<FF>::add_gates()
 
     for (size_t i = 0; i < get_num_gates(); i++) {
         // R1CS
-        FF A = symbolic_vars[0];
-        FF B = symbolic_vars[0];
-        FF C = symbolic_vars[0];
+        FF A = FF::Const("0", this->solver);
+        FF B = FF::Const("0", this->solver);
+        FF C = FF::Const("0", this->solver);
 
         for(size_t j = 0; j < this->selectors[i][0].size(); j++){
             A += symbolic_vars[this->wires_idxs[i][0][j]] * this->selectors[i][0][j];
@@ -208,7 +210,7 @@ template <typename FF> void Circuit<FF>::add_gates()
         for(size_t j = 0; j < this->selectors[i][2].size(); j++){
             C += symbolic_vars[this->wires_idxs[i][2][j]] * this->selectors[i][2][j];
         }
-        A * B == C;
+        A * B -C == "0";
 
 // TODO: PLONK support(just add switch during initialization)
 //        barretenberg::fr q_m = selectors[i][0];
@@ -285,26 +287,26 @@ nlohmann::json open(const std::string& filename);
 template <typename FF>
 std::pair<Circuit<FF>, Circuit<FF>> unique_witness(nlohmann::json& circuit_info,
                                                    Solver* s,
-                                                   const std::vector<std::string>& equal = {},
-                                                   const std::vector<std::string>& not_equal = {},
-                                                   const std::vector<std::string>& equal_at_the_same_time = {},
-                                                   const std::vector<std::string>& not_eqaul_at_the_same_time = {});
+                                                   const std::vector<std::string>& equal,
+                                                   const std::vector<std::string>& not_equal,
+                                                   const std::vector<std::string>& equal_at_the_same_time,
+                                                   const std::vector<std::string>& not_eqaul_at_the_same_time);
 
 extern template std::pair<Circuit<FFTerm>, Circuit<FFTerm>> unique_witness(
     nlohmann::json& circuit_info,
     Solver* s,
-    const std::vector<std::string>& equal = {},
-    const std::vector<std::string>& not_equal = {},
-    const std::vector<std::string>& equal_at_the_same_time = {},
-    const std::vector<std::string>& not_eqaul_at_the_same_time = {});
+    const std::vector<std::string>& equal,
+    const std::vector<std::string>& not_equal,
+    const std::vector<std::string>& equal_at_the_same_time,
+    const std::vector<std::string>& not_eqaul_at_the_same_time);
 
 extern template std::pair<Circuit<FFITerm>, Circuit<FFITerm>> unique_witness(
     nlohmann::json& circuit_info,
     Solver* s,
-    const std::vector<std::string>& equal = {},
-    const std::vector<std::string>& not_equal = {},
-    const std::vector<std::string>& equal_at_the_same_time = {},
-    const std::vector<std::string>& not_eqaul_at_the_same_time = {});
+    const std::vector<std::string>& equal,
+    const std::vector<std::string>& not_equal,
+    const std::vector<std::string>& equal_at_the_same_time,
+    const std::vector<std::string>& not_eqaul_at_the_same_time);
 
 template <typename FF>
 std::pair<Circuit<FF>, Circuit<FF>> unique_witness(nlohmann::json& circuit_info,
