@@ -4,12 +4,14 @@ cd ../smt-verification-library
 make
 cd ../circom-verification
 make
-cd ..
 
 -> circom-verification/circuits/something/main.circom
-make translate-circom 
+
+make translate-circom CIRCUIT=CIRCUITNAME
+
 -> circom-verification/verify/something/main.cpp
-make verify-circom
+
+make verify-circom CIRCUIT=CIRCUITNAME
 
 # TODO
 - plonk switch
