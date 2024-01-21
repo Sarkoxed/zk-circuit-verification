@@ -1,0 +1,9 @@
+[submodule "site/cvc5"]
+	path = site/cvc5
+	url = git@github.com:cvc5/cvc5
+[submodule "site/json"]
+	path = site/json
+	url = git@github.com:nlohmann/json.git
+[submodule "site/circom"]
+	path = site/circom
+	url = git@github.com:iden3/circom.git

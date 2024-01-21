@@ -1,0 +1,19 @@
+.PHONY: default
+default: lib
+
+CVC5_INCLUDE = ../site/cvc5/build/include
+CVC5_LIB = ../site/cvc5/build/lib
+JSON_INCLUDE = ../site/json/single_include
+CXX = clang++
+
+.PHONY: lib
+lib: obj
+	$(CXX) -shared ./obj/*.o -o ./lib/lcircuit.so
+
+.PHONY: obj
+obj: circuit/*.cpp terms/*.cpp solver/*.cpp
+	$(CXX) -std=c++20 -I./include -I$(CVC_INCLUDE) -c ./solver/solver.cpp -o $(SMT)/obj/solver.o 
+	$(CXX) -std=c++20 -I./include -c ./terms/ffterm.cpp  -o ./obj/ffterm.o
+	$(CXX) -std=c++20 -I./include -c ./terms/ffiterm.cpp -o ./obj/ffiterm.o
+	$(CXX) -std=c++20 -I./include -c ./terms/bool.cpp    -o ./obj/bool.o
+	$(CXX) -std=c++20 -I./include $(JSON_INCLUDE) -c ./circuit/circuit.cpp -o ./obj/circuit.o -fPIC

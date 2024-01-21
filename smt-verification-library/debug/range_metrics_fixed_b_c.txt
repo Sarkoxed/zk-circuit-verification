@@ -1,0 +1,54 @@
+Time taken 0 bits: 0 seconds
+0
+9
+Time taken 1 bits: 0.001 seconds
+1
+9
+Time taken 2 bits: 0 seconds
+0
+11
+Time taken 3 bits: 0.002 seconds
+4
+13
+Time taken 4 bits: 0.006 seconds
+14
+15
+Time taken 5 bits: 0.005 seconds
+4
+17
+Time taken 6 bits: 0.031 seconds
+59
+19
+Time taken 7 bits: 0.079 seconds
+121
+21
+Time taken 8 bits: 0.162 seconds
+205
+23
+Time taken 9 bits: 0.419 seconds
+373
+25
+Time taken 10 bits: 0.842 seconds
+459
+27
+Time taken 11 bits: 1.915 seconds
+1239
+29
+Time taken 12 bits: 3.335 seconds
+2730
+31
+Time taken 13 bits: 6.842 seconds
+3852
+33
+Time taken 14 bits: 20.805 seconds
+5697
+35
+Time taken 15 bits: 1.034 seconds
+575
+37
+Time taken 16 bits: 84.973 seconds
+17166
+39
+Time taken 17 bits: 167.474 seconds
+70303
+41
