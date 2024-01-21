@@ -13,15 +13,15 @@ uint get_main_input_signal_start() {return 2;}
 
 uint get_main_input_signal_no() {return 2;}
 
-uint get_total_signal_no() {return 1004;}
+uint get_total_signal_no() {return 4;}
 
 uint get_number_of_components() {return 1;}
 
 uint get_size_of_input_hashmap() {return 256;}
 
-uint get_size_of_witness() {return 1003;}
+uint get_size_of_witness() {return 4;}
 
-uint get_size_of_constants() {return 4;}
+uint get_size_of_constants() {return 0;}
 
 uint get_size_of_io_map() {return 0;}
 
@@ -76,56 +76,16 @@ u32* mySubcomponents = ctx->componentMemory[ctx_index].subcomponents;
 bool* mySubcomponentsParallel = ctx->componentMemory[ctx_index].subcomponentsParallel;
 FrElement* circuitConstants = ctx->circuitConstants;
 std::string* listOfTemplateMessages = ctx->listOfTemplateMessages;
-FrElement expaux[6];
-FrElement lvar[2];
+FrElement expaux[3];
+FrElement lvar[0];
 uint sub_component_aux;
 uint index_multiple_eq;
 {
-PFrElement aux_dest = &lvar[0];
-// load src
-// end load src
-Fr_copy(aux_dest,&circuitConstants[0]);
-}
-{
-PFrElement aux_dest = &signalValues[mySignalStart + 3];
-// load src
-Fr_mul(&expaux[1],&signalValues[mySignalStart + 1],&signalValues[mySignalStart + 1]); // line circom 10
-Fr_add(&expaux[0],&expaux[1],&signalValues[mySignalStart + 2]); // line circom 10
-// end load src
-Fr_copy(aux_dest,&expaux[0]);
-}
-{
-PFrElement aux_dest = &lvar[1];
-// load src
-// end load src
-Fr_copy(aux_dest,&circuitConstants[2]);
-}
-Fr_lt(&expaux[0],&lvar[1],&circuitConstants[0]); // line circom 11
-while(Fr_isTrue(&expaux[0])){
-{
-PFrElement aux_dest = &signalValues[mySignalStart + ((1 * Fr_toInt(&lvar[1])) + 3)];
-// load src
-Fr_sub(&expaux[2],&lvar[1],&circuitConstants[2]); // line circom 12
-Fr_sub(&expaux[3],&lvar[1],&circuitConstants[2]); // line circom 12
-Fr_mul(&expaux[1],&signalValues[mySignalStart + ((1 * Fr_toInt(&expaux[2])) + 3)],&signalValues[mySignalStart + ((1 * Fr_toInt(&expaux[3])) + 3)]); // line circom 12
-Fr_add(&expaux[0],&expaux[1],&signalValues[mySignalStart + 2]); // line circom 12
-// end load src
-Fr_copy(aux_dest,&expaux[0]);
-}
-{
-PFrElement aux_dest = &lvar[1];
-// load src
-Fr_add(&expaux[0],&lvar[1],&circuitConstants[2]); // line circom 11
-// end load src
-Fr_copy(aux_dest,&expaux[0]);
-}
-Fr_lt(&expaux[0],&lvar[1],&circuitConstants[0]); // line circom 11
-}
-{
 PFrElement aux_dest = &signalValues[mySignalStart + 0];
 // load src
+Fr_mul(&expaux[0],&signalValues[mySignalStart + 1],&signalValues[mySignalStart + 2]); // line circom 8
 // end load src
-Fr_copy(aux_dest,&signalValues[mySignalStart + 1002]);
+Fr_copy(aux_dest,&expaux[0]);
 }
 for (uint i = 0; i < 0; i++){
 uint index_subc = ctx->componentMemory[ctx_index].subcomponents[i];

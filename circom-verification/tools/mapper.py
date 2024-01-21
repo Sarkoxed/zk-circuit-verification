@@ -6,7 +6,7 @@ def create_map(filename_sym, file_json=None):
     fd = open(filename_sym, 'rt')
     lines = fd.read().split('\n')[:-1]
 
-    Idx2Name = [0 for _ in range(len(lines))]    
+    Idx2Name = [0 for _ in range(len(lines) + 1)]    
     Idx2Name[0] = "one"
     
     idxs = []
