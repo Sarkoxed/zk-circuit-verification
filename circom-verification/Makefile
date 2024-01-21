@@ -9,6 +9,7 @@ default: init constraints map witness
 init:
 	mkdir $(WD) 2>/dev/null || true
 	mkdir verify/$(CIRCUIT) 2>/dev/null || true
+	cp verify/template.cpp verify/$(CIRCUIT)/$(CIRCUIT).cpp
 
 .PHONY: constraints
 constraints: $(WD)/constraints.json
