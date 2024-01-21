@@ -26,4 +26,4 @@ FLAGS += -lcvc5
 verify-circom: $(CIRCUIT).out
 
 $(CIRCUIT).out: circom-verification/verify/$(CIRCUIT)/$(CIRCUIT).cpp smt-verification-library/lib
-	clang++ circom-verification/verify/$(CIRCUIT)/$(CIRCUIT).cpp $(FLAGS) -o $(CIRCUIT).out -O3
+	clang++ circom-verification/verify/$(CIRCUIT)/$(CIRCUIT).cpp $(FLAGS) -o bin/$(CIRCUIT).out -O3
