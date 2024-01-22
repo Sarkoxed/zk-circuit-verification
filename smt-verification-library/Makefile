@@ -17,3 +17,9 @@ obj: circuit/*.cpp terms/*.cpp solver/*.cpp
 	$(CXX) -std=c++20 -I./include -c ./terms/ffiterm.cpp -o ./obj/ffiterm.o
 	$(CXX) -std=c++20 -I./include -c ./terms/bool.cpp    -o ./obj/bool.o
 	$(CXX) -std=c++20 -I./include -I$(JSON_INCLUDE) -c ./circuit/circuit.cpp -o ./obj/circuit.o -fPIC
+
+.PHONY: clean
+clean:
+	@echo "Cleaning binaries..."
+	-rm lib/*.so
+	-rm obj/*.o

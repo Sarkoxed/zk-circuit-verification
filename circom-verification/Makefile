@@ -35,4 +35,4 @@ $(WD)/witness.json: $(SD)/input.json constraints
 .PHONY: clean
 clean: 
 	@echo "Cleaning constraints/$(CIRCUIT) directoriey"
-	rm -rf $(WD) 2>/dev/null || true
+	-rm -rf $(WD) 2>/dev/null
