@@ -20,6 +20,6 @@ obj: circuit/*.cpp terms/*.cpp solver/*.cpp
 
 .PHONY: clean
 clean:
-	@echo "Cleaning binaries..."
-	-rm lib/*.so
-	-rm obj/*.o
+	@echo "Cleaning binaries obj/*.o and lib/*.so..."
+	-@rm lib/*.so 2>/dev/null || true
+	-@rm obj/*.o 2>/dev/null || true
