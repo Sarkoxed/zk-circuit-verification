@@ -8,12 +8,10 @@ CXX = clang++
 
 .PHONY: lib
 lib: obj
-	mkdir lib || true
 	$(CXX) -shared ./obj/*.o -o ./lib/libcircuit.so
 
 .PHONY: obj
 obj: circuit/*.cpp terms/*.cpp solver/*.cpp
-	mkdir obj || true
 	$(CXX) -std=c++20 -I./include -I$(CVC5_INCLUDE) -c ./solver/solver.cpp -o ./obj/solver.o 
 	$(CXX) -std=c++20 -I./include -c ./terms/ffterm.cpp  -o ./obj/ffterm.o
 	$(CXX) -std=c++20 -I./include -c ./terms/ffiterm.cpp -o ./obj/ffiterm.o
