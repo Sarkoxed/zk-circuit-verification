@@ -22,8 +22,8 @@ void default_model(const std::vector<std::string>& special,
 {
     std::vector<cvc5::Term> vterms1;
     std::vector<cvc5::Term> vterms2;
-    vterms1.reserve(c1.get_num_real_vars());
-    vterms2.reserve(c1.get_num_real_vars());
+    vterms1.reserve(c1.get_num_vars());
+    vterms2.reserve(c1.get_num_vars());
 
     for (uint32_t i = 0; i < c1.get_num_vars(); i++) {
         vterms1.push_back(c1.symbolic_vars[c1.real_variable_index[i]]);
@@ -58,7 +58,7 @@ void default_model(const std::vector<std::string>& special,
 
     std::unordered_map<std::string, std::string> mmap = s->model(vterms);
     for (const auto& vname : special) {
-        info(vname, "_1, ", vname, "_2 = ", mmap[vname + "_1"], ", ", mmap[vname + "_2"]);
+        std::cout << vname << "_1, " << vname<< "_2 = "<< mmap[vname + "_1"]<< ", "<< mmap[vname + "_2"]<<std::endl;
     }
 }
 
@@ -81,10 +81,10 @@ void default_model_single(const std::vector<std::string>& special,
                           const std::string& fname)
 {
     std::vector<cvc5::Term> vterms;
-    vterms.reserve(c.get_num_real_vars());
+    vterms.reserve(c.get_num_vars());
 
     for (uint32_t i = 0; i < c.get_num_vars(); i++) {
-        vterms.push_back(c.symbolic_vars[i]);
+        vterms.push_back(c.symbolic_vars[c.real_variable_index[i]]);
     }
 
     std::unordered_map<std::string, std::string> mmap = s->model(vterms);
@@ -110,7 +110,7 @@ void default_model_single(const std::vector<std::string>& special,
 
     std::unordered_map<std::string, std::string> mmap1 = s->model(vterms1);
     for (const auto& vname : special) {
-        info(vname, " = ", mmap1[vname]);
+        std::cout << vname<< " = "<< mmap1[vname] << std::endl;
     }
 }
 
@@ -121,47 +121,14 @@ void default_model_single(const std::vector<std::string>& special,
  * @param s
  * @return bool is system satisfiable?
  */
-bool smt_timer(smt_solver::Solver* s, bool mins)
+bool smt_timer(smt_solver::Solver* s)
 {
     auto start = std::chrono::high_resolution_clock::now();
     bool res = s->check();
     auto stop = std::chrono::high_resolution_clock::now();
-    double duration = 0.0;
-    if (mins) {
-        duration = static_cast<double>(duration_cast<std::chrono::minutes>(stop - start).count());
-        info("Time elapsed: ", duration, " min");
-    } else {
-        duration = static_cast<double>(duration_cast<std::chrono::seconds>(stop - start).count());
-        info("Time elapsed: ", duration, " sec");
-    }
+    uint32_t duration_secs = static_cast<uint32_t>(duration_cast<std::chrono::seconds>(stop - start).count());
+    std::cout << "Time elapsed: " << duration_secs / 60<< " min "<< duration_secs % 60<< " sec" << std::endl;
 
-    info(s->cvc_result);
+    std::cout << s->cvc_result << std::endl;
     return res;
-}
-
-/**
- * @brief base4 decomposition with accumulators
- *
- * @param el
- * @return base decomposition, accumulators
- */
-std::pair<std::vector<bb::fr>, std::vector<bb::fr>> base4(uint32_t el)
-{
-    std::vector<bb::fr> limbs;
-    limbs.reserve(16);
-    for (size_t i = 0; i < 16; i++) {
-        limbs.emplace_back(el % 4);
-        el /= 4;
-    }
-    std::reverse(limbs.begin(), limbs.end());
-    std::vector<bb::fr> accumulators;
-    accumulators.reserve(16);
-    bb::fr accumulator = 0;
-    for (size_t i = 0; i < 16; i++) {
-        accumulator = accumulator * 4 + limbs[i];
-        accumulators.emplace_back(accumulator);
-    }
-    std::reverse(limbs.begin(), limbs.end());
-    std::reverse(accumulators.begin(), accumulators.end());
-    return { limbs, accumulators };
 }

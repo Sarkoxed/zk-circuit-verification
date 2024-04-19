@@ -1,10 +1,10 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <unordered_map>
 
 #include <cvc5/cvc5.h>
 
-#include "barretenberg/ecc/curves/bn254/fr.hpp"
 namespace smt_solver {
 
 /**

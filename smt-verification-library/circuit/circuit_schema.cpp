@@ -2,99 +2,55 @@
 
 namespace smt_circuit_schema {
 
-/**
- * @brief Get the CircuitSchema object
- * @details Initialize the CircuitSchema from the binary file
- * that contains an msgpack compatible buffer.
- *
- * @param filename
- * @return CircuitSchema
- */
-CircuitSchema unpack_from_file(const std::string& filename)
-{
+///**
+// * @brief Translates the schema to python format
+// * @details Returns the contents of the .py file
+// * that can be further imported by python script
+// *
+// * @example output.py
+// * variables = ["zero", "one", "my_input1", "var3", ..., "var_n"] - variable
+// * names public = [[0, 0x000...0], [1, 0x000...1], [2, 0x000..abcd]] - (index,
+// * value) gates = [
+// *  [[0x000...0, 0x000...1, 0x000...0, 0x000...0, 0x000...0], [0, 0, 0]], ...
+// * ]
+// */
+//void print_schema_for_use_in_python(CircuitSchema &cir) {
+//  std::cout << "variable_names = [" << std::endl;
+//  for (uint32_t i = 0; i < static_cast<uint32_t>(cir.variables.size()); i++) {
+//    if (cir.vars_of_interest.contains(i)) {
+//      std::cout << '"' << cir.vars_of_interest[i] << "\"," << std::endl;
+//    } else {
+//      std::cout << "\"v" << i << "\"," << std::endl;
+//    }
+//  }
+//  std::cout << "]" << std::endl;
+//  std::cout << "public = [" << std::endl;
+//  for (auto i : cir.public_inps) {
+//    std::cout << "[" << i << ", " << cir.variables[i] << "]," << std::endl;
+//  }
+//  std::cout << "]" << std::endl;
+//  std::cout << "gates = [" << std::endl;
+//
+//  for (size_t i = 0; i < cir.selectors.size(); i++) {
+//    std::cout << "["
+//              << "[" << cir.selectors[i][0] << cir.selectors[i][1] << ", "
+//              << cir.selectors[i][2] << ", " << cir.selectors[i][3] << ", "
+//              << cir.selectors[i][4] << "], [" << cir.wires[i][0] << ", "
+//              << cir.wires[i][1] << ", " << cir.wires[i][2] << "]],"
+//              << std::endl;
+//  }
+//  std::cout << "]" << std::endl;
+//}
+
+nlohmann::json open(const std::string& filename){
     std::ifstream fin;
-    fin.open(filename, std::ios::ate | std::ios::binary);
-    if (!fin.is_open()) {
-        throw std::invalid_argument("file not found");
+    fin.open(filename);
+    if(!fin.is_open()){
+        throw std::invalid_argument("no such a file");
     }
-    if (fin.tellg() == -1) {
-        throw std::invalid_argument("something went wrong");
-    }
-
-    uint64_t fsize = static_cast<uint64_t>(fin.tellg());
-    fin.seekg(0, std::ios_base::beg);
-
-    CircuitSchema cir;
-    char* encoded_data = new char[fsize];
-    fin.read(encoded_data, static_cast<std::streamsize>(fsize));
-    msgpack::unpack(encoded_data, fsize).get().convert(cir);
-    return cir;
+    nlohmann::json res;
+    fin >> res;
+    return res;
 }
 
-/**
- * @brief Translates the schema to python format
- * @details Returns the contents of the .py file
- * that can be further imported by python script
- *
- * @example output.py
- * variables = ["zero", "one", "my_input1", "var3", ..., "var_n"] - variable names
- * public = [[0, 0x000...0], [1, 0x000...1], [2, 0x000..abcd]] - (index, value)
- * gates = [
- *  [[0x000...0, 0x000...1, 0x000...0, 0x000...0, 0x000...0], [0, 0, 0]], ...
- * ]
- */
-void print_schema_for_use_in_python(CircuitSchema& cir)
-{
-    info("variable_names = [");
-    for (uint32_t i = 0; i < static_cast<uint32_t>(cir.variables.size()); i++) {
-        if (cir.vars_of_interest.contains(i)) {
-            info('"', cir.vars_of_interest[i], "\",");
-        } else {
-            info("\"v", i, "\",");
-        }
-    }
-    info("]");
-    info("public = [");
-    for (auto i : cir.public_inps) {
-        info("[", i, ", ", cir.variables[i], "],");
-    }
-    info("]");
-    info("gates = [");
-
-    for (size_t i = 0; i < cir.selectors.size(); i++) {
-        info("[",
-             "[",
-             cir.selectors[i][0],
-             ", ",
-             cir.selectors[i][1],
-             ", ",
-             cir.selectors[i][2],
-             ", ",
-             cir.selectors[i][3],
-             ", ",
-             cir.selectors[i][4],
-             "], [",
-             cir.wires[i][0],
-             ", ",
-             cir.wires[i][1],
-             ", ",
-             cir.wires[i][2],
-             "]],");
-    }
-    info("]");
-}
-
-/**
- * @brief Get the CircuitSchema object
- * @details Initialize the CircuitSchema from the msgpack compatible buffer.
- *
- * @param buf
- * @return CircuitSchema
- */
-CircuitSchema unpack_from_buffer(const msgpack::sbuffer& buf)
-{
-    CircuitSchema cir;
-    msgpack::unpack(buf.data(), buf.size()).get().convert(cir);
-    return cir;
-}
 } // namespace smt_circuit_schema

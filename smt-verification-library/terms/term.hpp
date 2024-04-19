@@ -1,5 +1,5 @@
 #pragma once
-#include "barretenberg/smt_verification/solver/solver.hpp"
+#include "../include/solver.hpp"
 
 namespace smt_terms {
 using namespace smt_solver;
@@ -112,14 +112,14 @@ class STerm {
     static STerm Var(const std::string& name, Solver* slv, TermType type = TermType::FFTerm);
     static STerm Const(const std::string& val, Solver* slv, uint32_t base = 16, TermType type = TermType::FFTerm);
 
-    STerm(bb::fr value, Solver* s, TermType type = TermType::FFTerm)
+    STerm(const std::string& value, Solver* s, TermType type = TermType::FFTerm)
     {
         std::stringstream buf; // TODO(#893)
         buf << value;
         std::string tmp = buf.str();
         tmp[1] = '0'; // avoiding `x` in 0x prefix
 
-        *this = Const(tmp, s, 16, type);
+        *this = Const(tmp, s, 10, type);
     }
 
     STerm& operator=(const STerm& right) = default;
@@ -181,40 +181,40 @@ class STerm {
 
     // arithmetic compatibility with Fr
 
-    STerm operator+(const bb::fr& other) const { return *this + STerm(other, this->solver, this->type); }
-    void operator+=(const bb::fr& other) { *this += STerm(other, this->solver, this->type); }
-    STerm operator-(const bb::fr& other) const { return *this - STerm(other, this->solver, this->type); }
-    void operator-=(const bb::fr& other) { *this -= STerm(other, this->solver, this->type); }
-    STerm operator*(const bb::fr& other) const { return *this * STerm(other, this->solver, this->type); }
-    void operator*=(const bb::fr& other) { *this *= STerm(other, this->solver, this->type); }
-    STerm operator/(const bb::fr& other) const { return *this / STerm(other, this->solver, this->type); }
-    void operator/=(const bb::fr& other) { *this /= STerm(other, this->solver, this->type); }
+    STerm operator+(const std::string& other) const { return *this + STerm(other, this->solver, this->type); }
+    void operator+=(const std::string& other) { *this += STerm(other, this->solver, this->type); }
+    STerm operator-(const std::string& other) const { return *this - STerm(other, this->solver, this->type); }
+    void operator-=(const std::string& other) { *this -= STerm(other, this->solver, this->type); }
+    STerm operator*(const std::string& other) const { return *this * STerm(other, this->solver, this->type); }
+    void operator*=(const std::string& other) { *this *= STerm(other, this->solver, this->type); }
+    STerm operator/(const std::string& other) const { return *this / STerm(other, this->solver, this->type); }
+    void operator/=(const std::string& other) { *this /= STerm(other, this->solver, this->type); }
 
-    void operator==(const bb::fr& other) const { *this == STerm(other, this->solver, this->type); }
-    void operator!=(const bb::fr& other) const { *this != STerm(other, this->solver, this->type); }
+    void operator==(const std::string& other) const { *this == STerm(other, this->solver, this->type); }
+    void operator!=(const std::string& other) const { *this != STerm(other, this->solver, this->type); }
 
-    STerm operator^(const bb::fr& other) const { return *this ^ STerm(other, this->solver, this->type); };
-    void operator^=(const bb::fr& other) { *this ^= STerm(other, this->solver, this->type); };
-    STerm operator&(const bb::fr& other) const { return *this & STerm(other, this->solver, this->type); };
-    void operator&=(const bb::fr& other) { *this &= STerm(other, this->solver, this->type); };
-    STerm operator|(const bb::fr& other) const { return *this | STerm(other, this->solver, this->type); };
-    void operator|=(const bb::fr& other) { *this |= STerm(other, this->solver, this->type); };
+    STerm operator^(const std::string& other) const { return *this ^ STerm(other, this->solver, this->type); };
+    void operator^=(const std::string& other) { *this ^= STerm(other, this->solver, this->type); };
+    STerm operator&(const std::string& other) const { return *this & STerm(other, this->solver, this->type); };
+    void operator&=(const std::string& other) { *this &= STerm(other, this->solver, this->type); };
+    STerm operator|(const std::string& other) const { return *this | STerm(other, this->solver, this->type); };
+    void operator|=(const std::string& other) { *this |= STerm(other, this->solver, this->type); };
 
-    void operator<(const bb::fr& other) const;
-    void operator<=(const bb::fr& other) const;
-    void operator>(const bb::fr& other) const;
-    void operator>=(const bb::fr& other) const;
+    void operator<(const std::string& other) const;
+    void operator<=(const std::string& other) const;
+    void operator>(const std::string& other) const;
+    void operator>=(const std::string& other) const;
 };
 
-STerm operator+(const bb::fr& lhs, const STerm& rhs);
-STerm operator-(const bb::fr& lhs, const STerm& rhs);
-STerm operator*(const bb::fr& lhs, const STerm& rhs);
-STerm operator/(const bb::fr& lhs, const STerm& rhs);
-void operator==(const bb::fr& lhs, const STerm& rhs);
-void operator!=(const bb::fr& lhs, const STerm& rhs);
-STerm operator^(const bb::fr& lhs, const STerm& rhs);
-STerm operator&(const bb::fr& lhs, const STerm& rhs);
-STerm operator|(const bb::fr& lhs, const STerm& rhs);
+STerm operator+(const std::string& lhs, const STerm& rhs);
+STerm operator-(const std::string& lhs, const STerm& rhs);
+STerm operator*(const std::string& lhs, const STerm& rhs);
+STerm operator/(const std::string& lhs, const STerm& rhs);
+void operator==(const std::string& lhs, const STerm& rhs);
+void operator!=(const std::string& lhs, const STerm& rhs);
+STerm operator^(const std::string& lhs, const STerm& rhs);
+STerm operator&(const std::string& lhs, const STerm& rhs);
+STerm operator|(const std::string& lhs, const STerm& rhs);
 
 STerm FFVar(const std::string& name, Solver* slv);
 STerm FFConst(const std::string& val, Solver* slv, uint32_t base = 16);

@@ -141,7 +141,7 @@ void STerm::operator*=(const STerm& other)
 STerm STerm::operator/(const STerm& other) const
 {
     if (!this->operations.contains(OpType::DIV)) {
-        info("Division is not compatible with ", this->type);
+        std::cerr << "Division is not compatible with " << this->type << std::endl;
         return *this;
     }
     other != "0";
@@ -156,10 +156,10 @@ STerm STerm::operator/(const STerm& other) const
 void STerm::operator/=(const STerm& other)
 {
     if (!this->operations.contains(OpType::DIV)) {
-        info("Division is not compatible with ", this->type);
+        std::cerr << "Division is not compatible with " << this->type << std::endl;
         return;
     }
-    other != bb::fr(0);
+    other != std::string(0);
     STerm res = Var("df8b586e3fa7a1224ec95a886e17a7da_div_" + static_cast<std::string>(*this) + "_" +
                         static_cast<std::string>(other),
                     this->solver,
@@ -205,10 +205,10 @@ void STerm::operator!=(const STerm& other) const
     this->solver->assertFormula(eq);
 }
 
-void STerm::operator<(const bb::fr& other) const
+void STerm::operator<(const std::string& other) const
 {
     if (!this->operations.contains(OpType::LT)) {
-        info("LT is not compatible with ", this->type);
+        std::cerr << "LT is not compatible with " << this->type << std::endl;
         return;
     }
 
@@ -217,10 +217,10 @@ void STerm::operator<(const bb::fr& other) const
     this->solver->assertFormula(lt);
 }
 
-void STerm::operator<=(const bb::fr& other) const
+void STerm::operator<=(const std::string& other) const
 {
     if (!this->operations.contains(OpType::LE)) {
-        info("LE is not compatible with ", this->type);
+        std::cerr << "LE is not compatible with " << this->type << std::endl;
         return;
     }
     cvc5::Term le = this->solver->term_manager.mkTerm(this->operations.at(OpType::LE),
@@ -228,10 +228,10 @@ void STerm::operator<=(const bb::fr& other) const
     this->solver->assertFormula(le);
 }
 
-void STerm::operator>(const bb::fr& other) const
+void STerm::operator>(const std::string& other) const
 {
     if (!this->operations.contains(OpType::GT)) {
-        info("GT is not compatible with ", this->type);
+        std::cerr << "GT is not compatible with " << this->type << std::endl;
         return;
     }
     cvc5::Term gt = this->solver->term_manager.mkTerm(this->operations.at(OpType::GT),
@@ -239,10 +239,10 @@ void STerm::operator>(const bb::fr& other) const
     this->solver->assertFormula(gt);
 }
 
-void STerm::operator>=(const bb::fr& other) const
+void STerm::operator>=(const std::string& other) const
 {
     if (!this->operations.contains(OpType::GE)) {
-        info("GE is not compatible with ", this->type);
+        std::cerr << "GE is not compatible with " << this->type << std::endl;
         return;
     }
     cvc5::Term ge = this->solver->term_manager.mkTerm(this->operations.at(OpType::GE),
@@ -253,7 +253,7 @@ void STerm::operator>=(const bb::fr& other) const
 STerm STerm::operator^(const STerm& other) const
 {
     if (!this->operations.contains(OpType::XOR)) {
-        info("XOR is not compatible with ", this->type);
+        std::cerr << "XOR is not compatible with " << this->type << std::endl;
         return *this;
     }
     cvc5::Term res = solver->term_manager.mkTerm(this->operations.at(OpType::XOR), { this->term, other.term });
@@ -263,7 +263,7 @@ STerm STerm::operator^(const STerm& other) const
 void STerm::operator^=(const STerm& other)
 {
     if (!this->operations.contains(OpType::XOR)) {
-        info("XOR is not compatible with ", this->type);
+        std::cerr << "XOR is not compatible with " << this->type << std::endl;
         return;
     }
     this->term = solver->term_manager.mkTerm(this->operations.at(OpType::XOR), { this->term, other.term });
@@ -272,7 +272,7 @@ void STerm::operator^=(const STerm& other)
 STerm STerm::operator&(const STerm& other) const
 {
     if (!this->operations.contains(OpType::AND)) {
-        info("AND is not compatible with ", this->type);
+        std::cerr << "AND is not compatible with " << this->type << std::endl;
         return *this;
     }
     cvc5::Term res = solver->term_manager.mkTerm(this->operations.at(OpType::AND), { this->term, other.term });
@@ -282,7 +282,7 @@ STerm STerm::operator&(const STerm& other) const
 void STerm::operator&=(const STerm& other)
 {
     if (!this->operations.contains(OpType::AND)) {
-        info("AND is not compatible with ", this->type);
+        std::cerr << "AND is not compatible with " << this->type << std::endl;
         return;
     }
     this->term = solver->term_manager.mkTerm(this->operations.at(OpType::AND), { this->term, other.term });
@@ -291,7 +291,7 @@ void STerm::operator&=(const STerm& other)
 STerm STerm::operator|(const STerm& other) const
 {
     if (!this->operations.contains(OpType::OR)) {
-        info("OR is not compatible with ", this->type);
+        std::cerr << "OR is not compatible with " << this->type << std::endl;
         return *this;
     }
     cvc5::Term res = solver->term_manager.mkTerm(this->operations.at(OpType::OR), { this->term, other.term });
@@ -301,7 +301,7 @@ STerm STerm::operator|(const STerm& other) const
 void STerm::operator|=(const STerm& other)
 {
     if (!this->operations.contains(OpType::OR)) {
-        info("OR is not compatible with ", this->type);
+        std::cerr << "OR is not compatible with " << this->type << std::endl;
         return;
     }
     this->term = solver->term_manager.mkTerm(this->operations.at(OpType::OR), { this->term, other.term });
@@ -310,7 +310,7 @@ void STerm::operator|=(const STerm& other)
 STerm STerm::operator<<(const uint32_t& n) const
 {
     if (!this->operations.contains(OpType::LSH)) {
-        info("SHIFT LEFT is not compatible with ", this->type);
+        std::cerr << "SHIFT LEFT is not compatible with " << this->type << std::endl;
         return *this;
     }
     cvc5::Op lsh = solver->term_manager.mkOp(this->operations.at(OpType::LSH), { n });
@@ -321,7 +321,7 @@ STerm STerm::operator<<(const uint32_t& n) const
 void STerm::operator<<=(const uint32_t& n)
 {
     if (!this->operations.contains(OpType::LSH)) {
-        info("SHIFT LEFT is not compatible with ", this->type);
+        std::cerr << "SHIFT LEFT is not compatible with " << this->type << std::endl;
         return;
     }
     cvc5::Op lsh = solver->term_manager.mkOp(this->operations.at(OpType::LSH), { n });
@@ -331,7 +331,7 @@ void STerm::operator<<=(const uint32_t& n)
 STerm STerm::operator>>(const uint32_t& n) const
 {
     if (!this->operations.contains(OpType::RSH)) {
-        info("RIGHT LEFT is not compatible with ", this->type);
+        std::cerr << "RIGHT LEFT is not compatible with " << this->type << std::endl;
         return *this;
     }
     cvc5::Op rsh = solver->term_manager.mkOp(this->operations.at(OpType::RSH), { n });
@@ -342,7 +342,7 @@ STerm STerm::operator>>(const uint32_t& n) const
 void STerm::operator>>=(const uint32_t& n)
 {
     if (!this->operations.contains(OpType::RSH)) {
-        info("RIGHT LEFT is not compatible with ", this->type);
+        std::cerr << "RIGHT LEFT is not compatible with " << this->type << std::endl;
         return;
     }
     cvc5::Op rsh = solver->term_manager.mkOp(this->operations.at(OpType::RSH), { n });
@@ -352,7 +352,7 @@ void STerm::operator>>=(const uint32_t& n)
 STerm STerm::rotr(const uint32_t& n) const
 {
     if (!this->operations.contains(OpType::ROTR)) {
-        info("ROTR is not compatible with ", this->type);
+        std::cerr << "ROTR is not compatible with " << this->type << std::endl;
         return *this;
     }
     cvc5::Op rotr = solver->term_manager.mkOp(this->operations.at(OpType::ROTR), { n });
@@ -363,7 +363,7 @@ STerm STerm::rotr(const uint32_t& n) const
 STerm STerm::rotl(const uint32_t& n) const
 {
     if (!this->operations.contains(OpType::ROTL)) {
-        info("ROTL is not compatible with ", this->type);
+        std::cerr << "ROTL is not compatible with " << this->type << std::endl;
         return *this;
     }
     cvc5::Op rotl = solver->term_manager.mkOp(this->operations.at(OpType::ROTL), { n });
@@ -371,47 +371,47 @@ STerm STerm::rotl(const uint32_t& n) const
     return { res, this->solver, this->type };
 }
 
-STerm operator+(const bb::fr& lhs, const STerm& rhs)
+STerm operator+(const std::string& lhs, const STerm& rhs)
 {
     return rhs + lhs;
 }
 
-STerm operator-(const bb::fr& lhs, const STerm& rhs)
+STerm operator-(const std::string& lhs, const STerm& rhs)
 {
     return (-rhs) + lhs;
 }
 
-STerm operator*(const bb::fr& lhs, const STerm& rhs)
+STerm operator*(const std::string& lhs, const STerm& rhs)
 {
     return rhs * lhs;
 }
 
-STerm operator^(const bb::fr& lhs, const STerm& rhs)
+STerm operator^(const std::string& lhs, const STerm& rhs)
 {
     return rhs ^ lhs;
 }
 
-STerm operator&(const bb::fr& lhs, const STerm& rhs)
+STerm operator&(const std::string& lhs, const STerm& rhs)
 {
     return rhs & lhs;
 }
 
-STerm operator|(const bb::fr& lhs, const STerm& rhs)
+STerm operator|(const std::string& lhs, const STerm& rhs)
 {
     return rhs | lhs;
 }
 
-STerm operator/(const bb::fr& lhs, const STerm& rhs)
+STerm operator/(const std::string& lhs, const STerm& rhs)
 {
     return STerm(lhs, rhs.solver, rhs.type) / rhs;
 }
 
-void operator==(const bb::fr& lhs, const STerm& rhs)
+void operator==(const std::string& lhs, const STerm& rhs)
 {
     rhs == lhs;
 }
 
-void operator!=(const bb::fr& lhs, const STerm& rhs)
+void operator!=(const std::string& lhs, const STerm& rhs)
 {
     rhs != lhs;
 }

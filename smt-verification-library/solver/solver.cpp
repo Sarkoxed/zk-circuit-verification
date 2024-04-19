@@ -1,5 +1,4 @@
 #include "solver.hpp"
-#include <iostream>
 
 namespace smt_solver {
 
@@ -15,7 +14,7 @@ bool Solver::check()
     this->cvc_result = result;
 
     if (result.isUnknown()) {
-        info("Unknown Result");
+        std::cerr << "Unknown Result" << std::endl;
     }
     this->res = result.isSat();
     return this->res;
@@ -206,7 +205,7 @@ std::string stringify_term(const cvc5::Term& term, bool parenthesis)
         parenthesis = true;
         break;
     default:
-        info("Invalid operand :", term.getKind());
+        std::cerr << "Invalid operand :" << term.getKind() << std::endl;
         break;
     }
 
@@ -237,8 +236,8 @@ std::string stringify_term(const cvc5::Term& term, bool parenthesis)
  * */
 void Solver::print_assertions() const
 {
-    for (auto& t : this->solver.getAssertions()) {
-        info(stringify_term(t));
+    for (const auto& t : this->solver.getAssertions()) {
+        std::cout << stringify_term(t) << std::endl;
     }
 }
 }; // namespace smt_solver

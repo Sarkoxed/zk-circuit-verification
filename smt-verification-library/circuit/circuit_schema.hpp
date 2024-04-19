@@ -1,8 +1,12 @@
 #pragma once
 #include <fstream>
+#include <iostream>
+#include "../../site/json/single_include/nlohmann/json.hpp"
+#include <unordered_map>
+#include <vector>
 
-#include "barretenberg/serialize/cbind.hpp"
-#include "barretenberg/serialize/msgpack.hpp"
+using int32_t = __int32_t;
+using uint32_t = unsigned int;
 
 namespace smt_circuit_schema {
 
@@ -23,17 +27,15 @@ namespace smt_circuit_schema {
  * @param real_variable_index Encoded copy constraints
  */
 struct CircuitSchema {
-    std::string modulus;
-    std::vector<uint32_t> public_inps;
-    std::unordered_map<uint32_t, std::string> vars_of_interest;
-    std::vector<bb::fr> variables;
-    std::vector<std::vector<bb::fr>> selectors;
-    std::vector<std::vector<uint32_t>> wires;
-    std::vector<uint32_t> real_variable_index;
-    MSGPACK_FIELDS(modulus, public_inps, vars_of_interest, variables, selectors, wires, real_variable_index);
+  std::string modulus;
+  std::vector<uint32_t> public_inps;
+  std::unordered_map<uint32_t, std::string> vars_of_interest;
+  std::vector<std::string> variables;
+  std::vector<std::vector<std::vector<std::string>>> selectors;
+  std::vector<std::vector<std::vector<uint32_t>>> wires;
+  std::vector<uint32_t> real_variable_index;
 };
 
-CircuitSchema unpack_from_buffer(const msgpack::sbuffer& buf);
-CircuitSchema unpack_from_file(const std::string& filename);
-void print_schema_for_use_in_python(CircuitSchema& cir);
+nlohmann::json open(const std::string &filename);
+//void print_schema_for_use_in_python(CircuitSchema &cir);
 } // namespace smt_circuit_schema
